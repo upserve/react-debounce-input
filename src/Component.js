@@ -8,6 +8,7 @@ export const DebounceInput = React.createClass({
     element: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.func]),
     type: React.PropTypes.string,
     onChange: React.PropTypes.func.isRequired,
+    onChangeImmediately: React.PropTypes.func,
     onKeyDown: React.PropTypes.func,
     onBlur: React.PropTypes.func,
     value: React.PropTypes.oneOfType([
@@ -26,6 +27,7 @@ export const DebounceInput = React.createClass({
       element: 'input',
       type: 'text',
       minLength: 0,
+      onChangeImmediately: e => {},
       debounceTimeout: 100,
       forceNotifyByEnter: true,
       forceNotifyOnBlur: true
@@ -97,6 +99,8 @@ export const DebounceInput = React.createClass({
 
     const oldValue = this.state.value;
 
+    this.props.onChangeImmediately(event);
+
     this.setState({value: event.target.value}, () => {
       const {value} = this.state;
 
@@ -117,6 +121,7 @@ export const DebounceInput = React.createClass({
     const {
       element,
       onChange: _onChange,
+      onChangeImmediately: _onChangeImmediately,
       value: _value,
       minLength: _minLength,
       debounceTimeout: _debounceTimeout,
