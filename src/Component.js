@@ -7,8 +7,8 @@ export const DebounceInput = React.createClass({
   propTypes: {
     element: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.func]),
     type: React.PropTypes.string,
+    onChangeDebounced: React.PropTypes.func,
     onChange: React.PropTypes.func.isRequired,
-    onChangeImmediately: React.PropTypes.func,
     onKeyDown: React.PropTypes.func,
     onBlur: React.PropTypes.func,
     value: React.PropTypes.oneOfType([
@@ -27,7 +27,7 @@ export const DebounceInput = React.createClass({
       element: 'input',
       type: 'text',
       minLength: 0,
-      onChangeImmediately: e => {},
+      onChangeDebounced: e => {},
       debounceTimeout: 100,
       forceNotifyByEnter: true,
       forceNotifyOnBlur: true
@@ -68,12 +68,10 @@ export const DebounceInput = React.createClass({
 
 
   createNotifier(debounceTimeout) {
-    if (debounceTimeout < 0) {
+    if (debounceTimeout < 0 || debounceTimeout === 0) {
       this.notify = () => null;
-    } else if (debounceTimeout === 0) {
-      this.notify = this.props.onChange;
     } else {
-      this.notify = debounce(this.props.onChange, debounceTimeout);
+      this.notify = debounce(this.props.onChangeDebounced, debounceTimeout);
     }
   },
 
@@ -84,12 +82,12 @@ export const DebounceInput = React.createClass({
     }
 
     const {value} = this.state;
-    const {minLength, onChange} = this.props;
+    const {minLength, onChangeDebounced} = this.props;
 
     if (value.length >= minLength) {
-      onChange(event);
+      onChangeDebounced(event);
     } else {
-      onChange({...event, target: {...event.target, value}});
+      onChangeDebounced({...event, target: {...event.target, value}});
     }
   },
 
@@ -99,7 +97,7 @@ export const DebounceInput = React.createClass({
 
     const oldValue = this.state.value;
 
-    this.props.onChangeImmediately(event);
+    this.props.onChange(event);
 
     this.setState({value: event.target.value}, () => {
       const {value} = this.state;
@@ -121,7 +119,7 @@ export const DebounceInput = React.createClass({
     const {
       element,
       onChange: _onChange,
-      onChangeImmediately: _onChangeImmediately,
+      onChangeDebounced: _onChangeDebounced,
       value: _value,
       minLength: _minLength,
       debounceTimeout: _debounceTimeout,

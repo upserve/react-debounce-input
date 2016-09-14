@@ -14,7 +14,7 @@ const Controllable = React.createClass({
 
 
   render() {
-    const {value, debouncedValue, immediateValue} = this.state;
+    const {value, debouncedValue} = this.state;
 
     return (
       <div>
@@ -36,11 +36,11 @@ const Controllable = React.createClass({
                            value={value}
                            minLength={2}
                            debounceTimeout={500}
-                           onChangeImmediately={e =>
-                             this.setState({value: e.target.value, immediateValue: e.target.value})}
                            onChange={e =>
-                             this.setState({value: e.target.value, debouncedValue: e.target.value})} />
-            {immediateValue ? `${immediateValue}, ` : ''} {debouncedValue}
+                             this.setState({value: e.target.value})}
+                           onChangeDebounced={e =>
+                             this.setState({debouncedValue: e.target.value})} />
+            {debouncedValue}
           </label>
         </div>
       </div>
