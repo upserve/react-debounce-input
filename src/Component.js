@@ -68,7 +68,7 @@ export const DebounceInput = React.createClass({
 
 
   createNotifier(debounceTimeout) {
-    if (debounceTimeout < 0 || debounceTimeout === 0) {
+    if (debounceTimeout <= 0) {
       this.notify = () => null;
     } else {
       this.notify = debounce(this.props.onChangeDebounced, debounceTimeout);
@@ -102,13 +102,13 @@ export const DebounceInput = React.createClass({
     this.setState({value: event.target.value}, () => {
       const {value} = this.state;
 
-      if (value.length >= this.props.minLength) {
+      if (value.toString().length >= this.props.minLength) {
         this.notify(event);
         return;
       }
 
       // If user hits backspace and goes below minLength consider it cleaning the value
-      if (oldValue.length > value.length) {
+      if (oldValue.toString().length > value.toString().length) {
         this.notify({...event, target: {...event.target, value: ''}});
       }
     });

@@ -7,6 +7,7 @@ const Customizable = React.createClass({
   getInitialState() {
     return {
       value: '',
+      debouncedValue: '',
       minLength: 0,
       debounceTimeout: 500,
       infinite: false,
@@ -20,7 +21,7 @@ const Customizable = React.createClass({
     const {
       minLength, infinite, debounceTimeout,
       forceNotifyByEnter, forceNotifyOnBlur,
-      value, key
+      value, debouncedValue, key
     } = this.state;
 
     return (
@@ -82,8 +83,10 @@ const Customizable = React.createClass({
           minLength={minLength}
           debounceTimeout={infinite ? -1 : debounceTimeout}
           onChange={e => this.setState({value: e.target.value})}
+          onChangeDebounced={e => this.setState({debouncedValue: e.target.value})}
           onKeyDown={e => this.setState({key: e.key})} />
         <p>Value: {value}</p>
+        <p>Debounced value: {debouncedValue}</p>
         <p>Key pressed: {key}</p>
       </div>
 
