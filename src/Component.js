@@ -37,7 +37,7 @@ export const DebounceInput = React.createClass({
 
   getInitialState() {
     return {
-      value: this.props.value || ''
+        value: this.props.value === undefined || this.props.value === null ? '' : `${this.props.value}`
     };
   },
 
